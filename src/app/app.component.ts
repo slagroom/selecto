@@ -97,44 +97,45 @@ export class AppComponent implements OnInit {
 
     this.favorites = this.form.get('favorites') as FormArray;
 
-    this.favorites.valueChanges.subscribe(favorites => {
+    this.favorites.valueChanges.subscribe(this.onFormChanges);
+  }
+      
+  private onFormChanges = favorites => {
 
-      const usedSports = favorites
-        .map(f => f.sport)
-        .filter(f => f !== null);
+    const usedSports = favorites
+      .map(f => f.sport)
+      .filter(f => f !== null);
 
-      favorites.forEach((favorite) => {
+    favorites.forEach((favorite) => {
 
-        const sport = favorite.sport;
+      const sport = favorite.sport;
 
-        favorite.sportChoices = this.sports
-          .filter(s => s.name === sport || !usedSports.includes(s.name));
+      favorite.sportChoices = this.sports
+        .filter(s => s.name === sport || !usedSports.includes(s.name));
 
-          favorite.teamChoices = this.teams
-          .filter(t => t.sport === sport)
-          .map(t => t.name);
+        favorite.teamChoices = this.teams
+        .filter(t => t.sport === sport)
+        .map(t => t.name);
 
-        if (!favorite.teamChoices.includes(favorite.team)) {
-          favorite.team = '';
-        }
-      });
-
-      if (favorites[favorites.length - 1].sport !== null) {
-
-        const empty = {
-          sport: null,
-          team: null,
-          sportChoices: this.sports.filter(s => !usedSports.includes(s.name)),
-          teamChoices: []
-        };
-
-        favorites.push(empty);
-        this.pushFavorite(empty);
-      };
-
-      this.favorites.setValue(favorites, { emitEvent: false });
+      if (!favorite.teamChoices.includes(favorite.team)) {
+        favorite.team = '';
+      }
     });
 
+    if (favorites[favorites.length - 1].sport !== null) {
+
+      const empty = {
+        sport: null,
+        team: null,
+        sportChoices: this.sports.filter(s => !usedSports.includes(s.name)),
+        teamChoices: []
+      };
+
+      favorites.push(empty);
+      this.pushFavorite(empty);
+    };
+
+    this.favorites.setValue(favorites, { emitEvent: false });
   }
 
   private pushFavorite(favorite: any) {
