@@ -98,7 +98,7 @@ export class AppComponent implements OnInit {
 
       const usedSports = favorites
         .map(f => f.sport)
-        .filter(f => f === null);
+        .filter(f => f !== null);
 
       favorites.forEach((favorite) => {
 
