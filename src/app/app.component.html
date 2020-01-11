@@ -1,0 +1,27 @@
+<h1>Hey</h1>
+
+<form [formGroup]='form'>
+
+  <div formArrayName='favorites'>
+    <h3>Favorite Teams</h3>
+  
+    <div *ngFor='let favorite of form.get("favorites").controls' [formGroup]='favorite'>
+      <label>
+        Sport:
+        <ng-select formControlName='sport'
+            (change)='log($event)'
+            [items]='sports'>
+        </ng-select>
+      </label>
+      <label>
+        Team:
+        <ng-select formControlName='team'
+            (change)='log($event)'
+            [items]='teamNames'>
+        </ng-select>
+      </label>
+    </div>
+
+  </div>
+
+</form>
