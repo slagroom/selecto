@@ -102,9 +102,7 @@ export class AppComponent implements OnInit {
       
   private onFormChanges = favorites => {
 
-    const usedSports = this.favorites.value
-      .map(f => f.sport)
-      .filter(f => f !== null);
+    const usedSports = this.favorites.value.map(f => f.sport).filter(f => f !== null);
 
     if (favorites[favorites.length - 1].sport !== null) {
       const empty = { sport: null, team: null, sportChoices: [], teamChoices: [] };
@@ -120,9 +118,7 @@ export class AppComponent implements OnInit {
       favorite.sportChoices = this.sports
         .filter(s => s.name === sport || !usedSports.includes(s.name));
 
-      favorite.teamChoices = this.teams
-        .filter(t => t.sport === sport)
-        .map(t => t.name);
+      favorite.teamChoices = this.teams.filter(t => t.sport === sport).map(t => t.name);
 
       if (!favorite.teamChoices.includes(favorite.team)) {
         favorite.team = '';
@@ -135,6 +131,8 @@ export class AppComponent implements OnInit {
       } else {
         fg.get('team').enable({ emitEvent: false });
       }
+
     });
+
   }
 }
