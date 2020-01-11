@@ -30,9 +30,10 @@ export class AppComponent implements OnInit {
     return this.teams.map(t => t.name);
   }
 
-  private unusedSports: string[] = this.sports;
+  private unusedSports: string[] = [ 'baseball', 'football' ];
 
   private teamChoices(sport: string) {
+    console.log('team choices for: ' + sport);
     return this.teams
       .filter(t => t.sport === sport)
       .map(t => t.name);
@@ -49,28 +50,30 @@ export class AppComponent implements OnInit {
 
         this.formBuilder.group({
           sport: 'hockey',
-          // sportChoices: [
-          //   { name: 'baseball', displayName: 'Baseball' },
-          //   { name: 'football', displayName: 'Football' }
-          // ],
           team: 'Pittsburgh Penguins',
-          // teamChoices: [
-          //   'Pittsburgh Penguins',
-          //   'Colorado Avalanche'
-          // ]
+          sportChoices: this.formBuilder.control([
+            { name: 'hockey', displayName: 'Hockey' },
+            { name: 'baseball', displayName: 'Baseball' },
+            { name: 'football', displayName: 'Football' }
+          ]),
+          teamChoices: this.formBuilder.control([
+            'Pittsburgh Penguins',
+            'Colorado Avalanche'
+          ])
         }),
 
         this.formBuilder.group({
           sport: 'basketball',
-          // sportChoices: [
-          //   { name: 'baseball', displayName: 'Baseball' },
-          //   { name: 'football', displayName: 'Football' }
-          // ],
           team: 'Boston Celtics',
-          // teamChoices: [
-          //   'Boston Celtics',
-          //   'Los Angeles Lakers'
-          // ]
+          sportChoices: this.formBuilder.control([
+            { name: 'basketball', displayName: 'Basketball' },
+            { name: 'baseball', displayName: 'Baseball' },
+            { name: 'football', displayName: 'Football' }
+          ]),
+          teamChoices: this.formBuilder.control([
+            'Boston Celtics',
+            'Los Angeles Lakers'
+          ])
         })
 
       ])

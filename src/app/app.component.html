@@ -10,14 +10,16 @@
         Sport:
         <ng-select formControlName='sport'
             (change)='log($event)'
-            [items]='sports'>
+            [items]='favorite.get("sportChoices").value'
+            bindLabel='displayName'
+            bindValue='name'>
         </ng-select>
       </label>
       <label>
         Team:
         <ng-select formControlName='team'
             (change)='log($event)'
-            [items]='teamNames'>
+            [items]='favorite.get("teamChoices").value'>
         </ng-select>
       </label>
     </div>
