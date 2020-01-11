@@ -126,14 +126,7 @@ export class AppComponent implements OnInit {
         };
 
         favorites.push(empty);
-
-        (this.form.get("favorites") as FormArray).push(this.formBuilder.group({
-          sport: empty.sport,
-          team: [{ value: empty.team, disabled: true }],
-          sportChoices: empty.sportChoices,
-          teamChoices: empty.teamChoices
-        }));
-
+        this.pushFavorite(empty);
       };
 
       this.form.get("favorites").setValue(favorites, { emitEvent: false });
@@ -141,7 +134,12 @@ export class AppComponent implements OnInit {
 
   }
 
-  private log(msg: any) {
-    console.log(msg);
+  private pushFavorite(favorite: any) {
+    (this.form.get("favorites") as FormArray).push(this.formBuilder.group({
+      sport: favorite.sport,
+      team: [{ value: favorite.team, disabled: favorite.sport === null }],
+      sportChoices: favorite.sportChoices,
+      teamChoices: favorite.teamChoices
+    }));
   }
 }
