@@ -102,11 +102,25 @@ export class AppComponent implements OnInit {
       
   private onFormChanges = favorites => {
 
-    const usedSports = favorites
+    console.log('entering onFormChanges');
+
+    const usedSports = this.favorites.value
       .map(f => f.sport)
       .filter(f => f !== null);
 
-    favorites.forEach((favorite) => {
+    if (favorites[favorites.length - 1].sport !== null) {
+      console.log('adding empty row to end of form');
+      const empty = { sport: null, team: null, sportChoices: [], teamChoices: [] };
+      this.favorites.push(this.formBuilder.group(empty));
+      console.log('exiting onFormChanges');
+      return;
+    };
+
+    this.favorites.controls.forEach((fg, index) => {
+
+      let favorite = fg.value;
+
+      console.log('visiting ' + favorite.sport + ' (' + (index+1) + ' of ' + this.favorites.controls.length + ')');
 
       const sport = favorite.sport;
 
@@ -120,22 +134,12 @@ export class AppComponent implements OnInit {
       if (!favorite.teamChoices.includes(favorite.team)) {
         favorite.team = '';
       }
+
+      fg.setValue(favorite, { emitEvent: false });
+
     });
 
-    if (favorites[favorites.length - 1].sport !== null) {
-
-      const empty = {
-        sport: null,
-        team: null,
-        sportChoices: this.sports.filter(s => !usedSports.includes(s.name)),
-        teamChoices: []
-      };
-
-      favorites.push(empty);
-      this.pushFavorite(empty);
-    };
-
-    this.favorites.setValue(favorites, { emitEvent: false });
+    console.log('exiting onFormChanges');
   }
 
   private pushFavorite(favorite: any) {
