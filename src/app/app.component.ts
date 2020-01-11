@@ -126,8 +126,14 @@ export class AppComponent implements OnInit {
         };
 
         favorites.push(empty);
-        (this.form.get("favorites") as FormArray).push(this.formBuilder.group(empty));
-        
+
+        (this.form.get("favorites") as FormArray).push(this.formBuilder.group({
+          sport: empty.sport,
+          team: [{ value: empty.team, disabled: true }],
+          sportChoices: empty.sportChoices,
+          teamChoices: empty.teamChoices
+        }));
+
       };
 
       this.form.get("favorites").setValue(favorites, { emitEvent: false });
