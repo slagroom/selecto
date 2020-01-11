@@ -116,17 +116,19 @@ export class AppComponent implements OnInit {
         }
       });
 
-      // if (favorites[favorites.length - 1].sport !== null) {
-      //   favorites.push(
-      //     this.formBuilder.group({
-      //       sport: null,
-      //       team: null,
-      //       sportChoices: this.formBuilder.control(
-      //         this.sports.filter(s => !usedSports.includes(s.name))
-      //       ),
-      //       teamChoices: this.formBuilder.control([])
-      //     }));
-      // };
+      if (favorites[favorites.length - 1].sport !== null) {
+
+        const empty = {
+          sport: null,
+          team: null,
+          sportChoices: this.sports.filter(s => !usedSports.includes(s.name)),
+          teamChoices: []
+        };
+
+        favorites.push(empty);
+        (this.form.get("favorites") as FormArray).push(this.formBuilder.group(empty));
+        
+      };
 
       this.form.get("favorites").setValue(favorites, { emitEvent: false });
     });
