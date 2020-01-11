@@ -55,6 +55,7 @@ export class AppComponent implements OnInit {
   ];
 
   private form: FormGroup;
+  private favorites: FormArray;
 
   constructor(private formBuilder: FormBuilder) {}
 
@@ -94,7 +95,9 @@ export class AppComponent implements OnInit {
       ])
     });
 
-    this.form.get("favorites").valueChanges.subscribe(favorites => {
+    this.favorites = this.form.get('favorites') as FormArray;
+
+    this.favorites.valueChanges.subscribe(favorites => {
 
       const usedSports = favorites
         .map(f => f.sport)
@@ -129,13 +132,13 @@ export class AppComponent implements OnInit {
         this.pushFavorite(empty);
       };
 
-      this.form.get("favorites").setValue(favorites, { emitEvent: false });
+      this.favorites.setValue(favorites, { emitEvent: false });
     });
 
   }
 
   private pushFavorite(favorite: any) {
-    (this.form.get("favorites") as FormArray).push(this.formBuilder.group({
+    this.favorites.push(this.formBuilder.group({
       sport: favorite.sport,
       team: [{ value: favorite.team, disabled: favorite.sport === null }],
       sportChoices: favorite.sportChoices,
