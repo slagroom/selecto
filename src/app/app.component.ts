@@ -19,26 +19,6 @@ export class AppComponent implements OnInit {
     { sport: 'football', name: 'Green Bay Packers' },
   ];
 
-  private get sports(): string[] {
-    return Array.from(this.teams.reduce((set, t) => {
-      set.add(t.sport);
-      return set;
-    }, new Set<string>()));
-  }
-
-  private get teamNames(): string[] {
-    return this.teams.map(t => t.name);
-  }
-
-  private unusedSports: string[] = [ 'baseball', 'football' ];
-
-  private teamChoices(sport: string) {
-    console.log('team choices for: ' + sport);
-    return this.teams
-      .filter(t => t.sport === sport)
-      .map(t => t.name);
-  }
-
   private form: FormGroup;
 
   constructor(private formBuilder: FormBuilder) {}
