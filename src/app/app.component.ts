@@ -102,52 +102,39 @@ export class AppComponent implements OnInit {
       
   private onFormChanges = favorites => {
 
-    console.log('entering onFormChanges');
-
     const usedSports = this.favorites.value
       .map(f => f.sport)
       .filter(f => f !== null);
 
     if (favorites[favorites.length - 1].sport !== null) {
-      console.log('adding empty row to end of form');
       const empty = { sport: null, team: null, sportChoices: [], teamChoices: [] };
       this.favorites.push(this.formBuilder.group(empty));
-      console.log('exiting onFormChanges');
       return;
     };
 
-    this.favorites.controls.forEach((fg, index) => {
+    this.favorites.controls.forEach(fg => {
 
       let favorite = fg.value;
-
-      console.log('visiting ' + favorite.sport + ' (' + (index+1) + ' of ' + this.favorites.controls.length + ')');
-
       const sport = favorite.sport;
 
       favorite.sportChoices = this.sports
         .filter(s => s.name === sport || !usedSports.includes(s.name));
 
-        favorite.teamChoices = this.teams
+      favorite.teamChoices = this.teams
         .filter(t => t.sport === sport)
         .map(t => t.name);
 
       if (!favorite.teamChoices.includes(favorite.team)) {
         favorite.team = '';
       }
-
+      
       fg.setValue(favorite, { emitEvent: false });
-
+      
+      if (favorite.sport === null) {
+        fg.get('team').disable({ emitEvent: false });
+      } else {
+        fg.get('team').enable({ emitEvent: false });
+      }
     });
-
-    console.log('exiting onFormChanges');
-  }
-
-  private pushFavorite(favorite: any) {
-    this.favorites.push(this.formBuilder.group({
-      sport: favorite.sport,
-      team: [{ value: favorite.team, disabled: favorite.sport === null }],
-      sportChoices: favorite.sportChoices,
-      teamChoices: favorite.teamChoices
-    }));
   }
 }
