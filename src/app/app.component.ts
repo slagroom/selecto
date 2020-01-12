@@ -35,6 +35,11 @@ export class AppComponent implements OnInit {
     return sport;
   }
 
+  private initialFavorites: string[] = [
+    'Pittsburgh Penguins',
+    'Boston Celtics'
+  ];
+
   private get sports(): { name: string; displayName: string }[] {
     return Array.from(this.teams.map(t => t.sport)
       .reduce((set, sport) => {
@@ -49,11 +54,6 @@ export class AppComponent implements OnInit {
       });
   }
 
-  private initialFavorites: string[] = [
-    'Pittsburgh Penguins',
-    'Boston Celtics'
-  ];
-
   private form: FormGroup;
   private favorites: FormArray;
 
@@ -62,49 +62,25 @@ export class AppComponent implements OnInit {
   ngOnInit() {
 
     this.form = this.formBuilder.group({
-      favorites: this.formBuilder.array([
-
-        this.formBuilder.group({
-          sport: 'hockey',
-          team: 'Pittsburgh Penguins',
-          sportChoices: this.formBuilder.control([
-            { name: 'hockey', displayName: 'Hockey' },
-            { name: 'baseball', displayName: 'Baseball' },
-            { name: 'football', displayName: 'Football' }
-          ]),
-          teamChoices: this.formBuilder.control([
-            'Pittsburgh Penguins',
-            'Colorado Avalanche'
-          ])
-        }),
-
-        this.formBuilder.group({
-          sport: 'basketball',
-          team: 'Boston Celtics',
-          sportChoices: this.formBuilder.control([
-            { name: 'basketball', displayName: 'Basketball' },
-            { name: 'baseball', displayName: 'Baseball' },
-            { name: 'football', displayName: 'Football' }
-          ]),
-          teamChoices: this.formBuilder.control([
-            'Boston Celtics',
-            'Los Angeles Lakers'
-          ])
-        })
-
-      ])
+      favorites: this.formBuilder.array(
+        this.initialFavorites.map(team => this.formBuilder.group({
+          sport: this.getSport(team),
+          team,
+          sportChoices: this.formBuilder.control([]),
+          teamChoices: this.formBuilder.control([])
+        })))
     });
 
     this.favorites = this.form.get('favorites') as FormArray;
-
     this.favorites.valueChanges.subscribe(this.onFormChanges);
+    this.onFormChanges(this.favorites.value);
   }
       
   private onFormChanges = favorites => {
 
     const usedSports = this.favorites.value.map(f => f.sport).filter(f => f !== null);
 
-    if (favorites[favorites.length - 1].sport !== null) {
+    if (favorites.length === 0 || favorites[favorites.length - 1].sport !== null) {
       const empty = { sport: null, team: null, sportChoices: [], teamChoices: [] };
       this.favorites.push(this.formBuilder.group(empty));
       return;
@@ -133,6 +109,14 @@ export class AppComponent implements OnInit {
       }
 
     });
+    
+  }
 
+  private getSport(team: string) {
+    const match = this.teams.filter(t => t.name === team)[0];
+    if (match) {
+      return match.sport;
+    }
+    return 'unknown';
   }
 }
